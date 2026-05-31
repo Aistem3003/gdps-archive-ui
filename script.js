@@ -208,21 +208,24 @@ function applyMetaToSelected() {
 }
 
 async function submitUpload() {
-  const login     = document.getElementById('login').value.trim();
-  const userid    = document.getElementById('userid').value.trim();
-  const status    = document.getElementById('s2-status');
+  let login = document.getElementById('login').value.trim();
+  let userid = document.getElementById('userid').value.trim();
+  
+  const status = document.getElementById('s2-status');
   const btnSubmit = document.getElementById('btn-submit');
-  const btnBack   = document.getElementById('btn-back-s2');
+  const btnBack = document.getElementById('btn-back-s2');
 
-  const selected = uploadedFiles.filter(u => u.checked);
-  if (selected.length === 0) {
-    status.textContent = 'X NO FILES SELECTED';
-    status.className = 'gd-upload-status error';
-    return;
+  if (!login) {
+    login = "Anonymous";
+  }
+  if (!userid) {
+    userid = "0";
   }
 
-  if (!login || !userid) {
-    status.textContent = 'X PLEASE ENTER LOGIN AND ID';
+  const selected = uploadedFiles.filter(u => u.checked);
+  
+  if (selected.length === 0) {
+    status.textContent = 'X NO FILES SELECTED';
     status.className = 'gd-upload-status error';
     return;
   }
@@ -238,10 +241,12 @@ async function submitUpload() {
     } else {
       await realUpload(selected, login, userid);
     }
+
     showModal('LEVEL COMPLETE!<br>FILES UPLOADED!');
     status.textContent = '';
     setProgress('prog-overall', 0);
     setProgress('prog-current', 0);
+    
   } catch (err) {
     status.textContent = 'X ' + (err.message || 'UPLOAD FAILED');
     status.className   = 'gd-upload-status error';
