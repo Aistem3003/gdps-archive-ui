@@ -409,3 +409,16 @@ cg { color:#51ff3e; } ca { color:#00ffff; } cy { color:#ffff00; }
   .gd { display:none; }
   #tooSmallOverlay { display:flex; }
 }
+
+.gd-login-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.gd-label {
+  font-size: 9px;
+  color: #fff;
+  height: 20px;
+  margin-bottom: 5px;
+}
