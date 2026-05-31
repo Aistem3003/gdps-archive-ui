@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDPS Editor 2.2 Archive</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="tooSmallOverlay">
+  <div class="brownbox">
+    <h1>Yikes!</h1>
+    <p>Your <cg>screen</cg> isn't <ca>wide</ca> enough to <cy>display</cy> this <cg>page</cg>.<br><br>
+    Please <cy>rotate</cy> your <cg>device</cg> <ca>horizontally</ca> or <cy>resize</cy> your <cg>window</cg> to be <ca>longer</ca>.</p>
+    <p style="font-size:10px;margin-top:30px;">Did I color too many words? I think I colored too many words.</p>
+  </div>
+</div>
+
+<div class="gd">
+  <div class="gd-corner tl" aria-hidden="true"></div>
+  <div class="gd-corner tr" aria-hidden="true"></div>
+  <div class="gd-corner bl" aria-hidden="true"></div>
+  <div class="gd-corner br" aria-hidden="true"></div>
+
+  <div class="gd-inner">
+
+    <div class="gd-header">
+      <div class="gd-logo" role="img" aria-label="Geometry Dash"></div>
+    </div>
+
+    <div class="gd-section-title">
+      <div class="gd-section-title-img" role="img" aria-label="Level Browser"></div>
+    </div>
+
+    <div class="gd-steps" aria-label="Steps">
+      <div class="gd-pip active" id="pip0"></div>
+      <div class="gd-pip" id="pip1"></div>
+      <div class="gd-pip" id="pip2"></div>
+    </div>
+
+    <div id="s0" class="step-view active">
+      <div class="gd-panel" style="max-width:600px;margin:0 auto;">
+        <div class="gd-panel-label">UPLOAD YOUR FILES :</div>
+        <div class="gd-drop" id="dropZone"
+          onclick="document.getElementById('fileInput').click()"
+          ondragover="event.preventDefault(); this.classList.add('over')"
+          ondragleave="this.classList.remove('over')"
+          ondrop="handleDrop(event)">
+          <div class="gd-drop-main">
+            DRAG &amp; DROP<br>OR <span class="gd-browse">BROWSE</span>
+          </div>
+        </div>
+        <input type="file" id="fileInput" multiple
+               accept=".dat,.lvl,.png,.jpg,.jpeg,.mp4,.mkv,.gif"
+               onchange="handleFiles(this.files)">
+        <div id="chips" class="gd-chips"></div>
+        <div id="s0-empty" class="gd-empty">NO FILES SELECTED</div>
+        <div class="gd-summary" id="s0-summary" style="display:none;text-align:center;"></div>
+      </div>
+      <div class="gd-footer" style="max-width:600px;margin:14px auto 0;">
+        <span></span>
+        <button class="gd-btn" id="btn-s0-next" onclick="tryGoStep1()" disabled>CONTINUE &gt;&gt;</button>
+      </div>
+    </div>
+
+    <div id="s1" class="step-view">
+      <div class="gd-two">
+
+        <div class="gd-panel" style="margin-bottom:0">
+          <div class="gd-panel-label">FILES :</div>
+          <div class="gd-v-hint">HOLD <span class="gd-v-key">V</span> — THUMBNAIL</div>
+          <div id="fileTree"></div>
+        </div>
+
+        <div>
+          <div class="gd-panel" style="margin-bottom:14px">
+            <div class="gd-field">
+              <label class="gd-label" for="platform">SRC PLATFORM :</label>
+              <select class="gd-select" id="platform">
+                <option value="YouTube">YouTube</option>
+                <option value="Newgrounds">Newgrounds</option>
+                <option value="GD Share">GD Share</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="gd-field">
+              <label class="gd-label" for="author">AUTHOR :</label>
+              <input class="gd-input" id="author" type="text" placeholder="level author...">
+            </div>
+            <div class="gd-field">
+              <label class="gd-label" for="levelname">LEVEL NAME :</label>
+              <input class="gd-input" id="levelname" type="text" placeholder="level name...">
+            </div>
+            <div class="gd-field" style="margin-bottom:0">
+              <label class="gd-label" for="approxtime">APPROX DATE :</label>
+              <input class="gd-input" id="approxtime" type="datetime-local" style="margin-bottom:10px;">
+              <button class="gd-btn gd-btn-blue gd-btn-full gd-btn-sm"
+                      onclick="applyMetaToSelected()">APPLY TO SELECTED</button>
+            </div>
+            <div class="gd-upload-status" id="meta-status" style="text-align:center;margin-top:10px;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="gd-footer" style="margin-top:14px">
+        <button class="gd-btn gd-btn-blue" onclick="go(0)">&lt;&lt; BACK</button>
+        <button class="gd-btn" onclick="tryGoStep2()">CONTINUE &gt;&gt;</button>
+      </div>
+    </div>
+
+    <div id="s2" class="step-view">
+      <div style="max-width:400px;margin:0 auto;">
+        <div class="gd-panel">
+          <div class="gd-panel-label" style="text-align:center;font-size:11px;">
+            LOG IN
+          </div>
+          <div class="gd-login-cols">
+            <div>
+              <div class="gd-field">
+                <label class="gd-label" for="login">ENTER LOGIN :</label>
+                <input class="gd-input" id="login" type="text" placeholder="login...">
+              </div>
+            </div>
+            <div>
+              <div class="gd-field">
+                <label class="gd-label" for="userid">YOUR ID :</label>
+                <input class="gd-input" id="userid" type="text" placeholder="ID...">
+              </div>
+            </div>
+          </div>
+          <div class="gd-upload-status" id="upload-status" style="text-align:center;margin-bottom:6px;"></div>
+          <div class="gd-progress-label">OVERALL</div>
+          <div class="gd-progress-track">
+            <div class="gd-progress-fill" style="width:0%" id="prog-overall"></div>
+          </div>
+          <div class="gd-progress-label">CURRENT FILE</div>
+          <div class="gd-progress-track" style="margin-bottom:8px">
+            <div class="gd-progress-fill" style="width:0%" id="prog-current"></div>
+          </div>
+          <div class="gd-upload-status" id="s2-status" style="text-align:center;margin-bottom:10px;"></div>
+          <div style="font-size:10px;color:#ffffff;text-align:center;text-shadow:0 2px 0 #000;letter-spacing:0.5px;margin-top:8px;">
+            GDPS SERVERS ACCOUNT
+          </div>
+        </div>
+        <div class="gd-footer center">
+          <button class="gd-btn gd-btn-blue" id="btn-back-s2" onclick="go(1)">&lt;&lt; BACK</button>
+          <button class="gd-btn" id="btn-submit" onclick="submitUpload()">UPLOAD FILES</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="gd-modal-overlay" id="modal">
+  <div class="gd-modal">
+    <div class="gd-modal-text" id="modal-text">LEVEL COMPLETE!<br>FILES UPLOADED!</div>
+    <button class="gd-btn" onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
