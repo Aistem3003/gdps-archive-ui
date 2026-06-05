@@ -195,12 +195,19 @@ input[type=file] { display:none; }
 .gd-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; justify-content:center; }
 
 .gd-chip {
-  background:rgba(0,0,0,0.4);
-  border:2px solid #000;
-  padding:5px 10px;
-  font-size:10px; color:#ddffa0;
-  border-radius:2px;
-  display:flex; align-items:center; gap:6px;
+  background: rgba(0,0,0,0.4);
+  border: 2px solid #000;
+  padding: 5px 10px;
+  font-size: 10px; color: #ddffa0;
+  border-radius: 2px;
+  display: flex; align-items: center; gap: 6px;
+  max-width: 100%;
+}
+
+.gd-chip-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .gd-chip-remove {
@@ -249,6 +256,10 @@ input[type=file] { display:none; }
 
 .gd-two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 
+.gd-two > div {
+  min-width: 0;
+}
+
 .gd-folder-head {
   font-size:11px; color:#ddffa0;
   text-shadow:2px 2px 0 #000;
@@ -266,6 +277,7 @@ input[type=file] { display:none; }
   padding:6px 5px 6px 20px;
   font-size:10px; color:rgba(255,255,255,0.9);
   cursor:pointer; border-radius:2px; transition:background 0.1s;
+  min-width: 0;
 }
 
 .gd-file-item:hover { background:rgba(0,0,0,0.15); }
@@ -314,10 +326,15 @@ input[type=file] { display:none; }
 .gd-select option { background:#2a5c08; }
 
 .gd-upload-status {
-  margin-top:10px;
-  font-size:9px; color:#ddffa0;
-  text-shadow:2px 2px 0 #000;
-  letter-spacing:0.5px; min-height:14px;
+  margin-top: 10px;
+  font-size: 9px; color: #ddffa0;
+  text-shadow: 2px 2px 0 #000;
+  letter-spacing: 0.5px; min-height: 14px;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .gd-upload-status.error   { color:#ff8888; }
@@ -405,9 +422,27 @@ cg { color:#51ff3e; } ca { color:#00ffff; } cy { color:#ffff00; }
 
 .brownbox p { font-size:14px; }
 
-@media (max-width:900px),(max-height:600px) {
-  .gd { display:none; }
-  #tooSmallOverlay { display:flex; }
+@media (pointer: coarse) and (orientation: portrait) {
+  .gd { display: none; }
+  #tooSmallOverlay { display: flex; }
+}
+
+@media (pointer: fine) and (max-width: 800px) {
+  .gd { display: none; }
+  #tooSmallOverlay { display: flex; }
+}
+
+@media (max-height: 680px) {
+  .gd-inner { 
+    transform: scale(0.8); 
+    transform-origin: top center; 
+  }
+}
+
+@media (max-height: 500px) {
+  .gd-inner { 
+    transform: scale(0.65); 
+  }
 }
 
 .gd-login-cols {
