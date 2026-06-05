@@ -26,7 +26,7 @@ function tryGoStep1() {
 }
 
 function tryGoStep2() {
-  const hasData = uploadedFiles.some(u => u.checked && Object.keys(u.meta).length > 0);
+  const hasData = uploadedFiles.some(u => Object.keys(u.meta).length > 0);
   
   if (hasData) {
     go(2);
@@ -85,8 +85,10 @@ function renderChips() {
   uploadedFiles.forEach(u => {
     const s = document.createElement('span');
     s.className = 'gd-chip';
-    s.innerHTML = `${u.file.name}
+    
+    s.innerHTML = `<span class="gd-chip-text" title="${u.file.name}">${u.file.name}</span>
       <span class="gd-chip-remove" onclick="removeFile('${u.file.name.replace(/'/g,"\\'")}')">✕</span>`;
+    
     c.appendChild(s);
   });
 }
@@ -140,6 +142,7 @@ function buildFileTree() {
       const nameSpan = document.createElement('span');
       nameSpan.className = 'gd-file-name';
       nameSpan.textContent = u.file.name;
+      nameSpan.title = u.file.name;
 
       if (Object.keys(u.meta).length > 0) {
         nameSpan.classList.add('meta-filled');
@@ -168,11 +171,11 @@ function toggleFolder(el) {
 function applyMetaToSelected() {
   const platformVal = document.getElementById('platform').value;
   const authorVal = document.getElementById('author').value.trim();
-  const levelnameVal = document.getElementById('levelname').value.trim();
+  const descriptionVal = document.getElementById('description').value.trim();
   const approxtimeVal = document.getElementById('approxtime').value;
   const status = document.getElementById('meta-status');
 
-  if (!authorVal || !levelnameVal || !approxtimeVal) {
+  if (!authorVal || !descriptionVal || !approxtimeVal) {
     status.textContent = 'X PLEASE FILL ALL FIELDS';
     status.className = 'gd-upload-status error';
     return;
@@ -188,7 +191,7 @@ function applyMetaToSelected() {
   const meta = {
     platform:   platformVal,
     author:     authorVal,
-    levelname:  levelnameVal,
+    description:  descriptionVal,
     approxtime: approxtimeVal,
   };
   
@@ -222,7 +225,7 @@ async function submitUpload() {
     userid = "0";
   }
 
-  const selected = uploadedFiles.filter(u => u.checked);
+  const selected = uploadedFiles.filter(u => Object.keys(u.meta).length > 0);
   
   if (selected.length === 0) {
     status.textContent = 'X NO FILES SELECTED';
@@ -313,12 +316,11 @@ async function realUpload(files, login, userid) {
     fd.append('folder', u.folder);
     fd.append('login', login);
     fd.append('userid', userid);
-    fd.append('meta', JSON.stringify({
-      platform:   u.meta.platform   || document.getElementById('platform').value,
-      author:     u.meta.author     || document.getElementById('author').value,
-      levelname:  u.meta.levelname  || document.getElementById('levelname').value,
-      approxtime: u.meta.approxtime || document.getElementById('approxtime').value,
-    }));
+
+    fd.append('platform', u.meta.platform || document.getElementById('platform').value);
+    fd.append('author', u.meta.author || document.getElementById('author').value);
+    fd.append('description', u.meta.description || document.getElementById('description').value);
+    fd.append('approxtime', u.meta.approxtime || document.getElementById('approxtime').value);
 
     await uploadWithProgress(API_URL, fd, pct => setProgress('prog-current', pct));
     setProgress('prog-overall', Math.round(((i+1)/files.length)*100));
